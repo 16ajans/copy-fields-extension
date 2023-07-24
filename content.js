@@ -435,9 +435,9 @@ function getSourceFields(bemsId, selectedSiteRequesting, selectedProcess, isDrag
                             value = '3T-33';
                         } else if (value === 'E') {
                             value = '3T-33';
+                        } else {
+                            value = ' ';
                         }
-                    } else {
-                        value = ' ';
                     }
 
                     sourceFields[mapping.destination] = value;
