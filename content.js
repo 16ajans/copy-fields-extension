@@ -10,7 +10,7 @@ const adHocFieldsMappings = [
     { source: 'table#bodyTable tr:not([style*="display: none"]) > td:first-child > table tr:nth-child(3) td:nth-child(4)', destination: '#disclosureValueComboboxInput' },
     { source: 'table#bodyTable tr:not([style*="display: none"]) > td:first-child > table tr:nth-child(1) td:nth-child(12) span select option:checked', destination: '#sitePerformingLocComboboxInput' },
     { source: 'table#bodyTable tr:not([style*="display: none"]) > td:first-child > table tr:nth-child(3) td:nth-child(1)', destination: '#buLocDept' },
-    { source: 'table#bodyTable tr:not([style*="display: none"]) > td:first-child > table tr:nth-child(3) td:nth-child(1)', destination: '#deliverTo' },
+    { source: 'table#bodyTable tr:not([style*="display: none"]) > td:first-child > table tr:nth-child(1) td:nth-child(12) span select option:checked', destination: '#deliverTo' },
     {
         destination: '#customerRequestDate',
         customFunction: () => {
@@ -374,7 +374,7 @@ function getSourceFields(bemsId, selectedSiteRequesting, selectedProcess, isDrag
                     }
 
                     // Handle the conditional mapping for the specific source field
-                    if (mapping.source === 'table#bodyTable tr:not([style*="display: none"]) > td:first-child > table tr:nth-child(1) td:nth-child(12) span select option:checked') {
+                    if (mapping.destination === '#sitePerformingLocComboboxInput') {
                         if (value === 'S') {
                             value = 'ST LOUIS';
                         } else if (value === 'A') {
@@ -427,21 +427,17 @@ function getSourceFields(bemsId, selectedSiteRequesting, selectedProcess, isDrag
                             }
                         }
                     }
-                    // Handle deliverTo to only get the mailstop value
+                    // Handle deliverTo to set mailstop value based on plotting location
                     if (mapping.destination === '#deliverTo') {
-                        budget = value.split(',');
-                        for (let i = 0; i < budget.length; i++) {
-                            let element = budget[i].trim();
-                            if (element.includes("-") && element.split("-").length === 2) {
-                                if (!element.split("-")[0].includes(" ") && !element.split("-")[0].includes(".") && !element.split("-")[1].includes(".")) {
-                                    value = element;
-                                    console.log('deliverTo', value);
-                                    break;
-                                }
-                            } else {
-                                value = ' ';
-                            }
+                        if (value === 'S') {
+                            value = 'S306-1419';
+                        } else if (value === 'A') {
+                            value = '3T-33';
+                        } else if (value === 'E') {
+                            value = '3T-33';
                         }
+                    } else {
+                        value = ' ';
                     }
 
                     sourceFields[mapping.destination] = value;
